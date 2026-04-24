@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>给朱同学的一点鼓励 ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"PingFang SC","Microsoft YaHei";
+  background:linear-gradient(180deg,#fff8fb,#ffeef5,#f5f8ff);
+  overflow:hidden;
+}
+
+.title{
+  position:fixed;
+  top:20px;
+  width:100%;
+  text-align:center;
+  font-size:clamp(18px,5vw,30px);
+  color:#ff5c93;
+  z-index:20;
+}
+
+.bubble{
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%) scale(0.2);
+  padding:6px 10px;
+  border-radius:999px;
+  color:#fff;
+  font-size:12px;
+  opacity:0;
+  animation:pop 1s forwards;
+}
+
+@keyframes pop{
+  to{
+    opacity:1;
+    transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1);
+  }
+}
+
+.highfive{
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%) scale(0.2);
+  padding:14px 20px;
+  border-radius:999px;
+  background:#ff6b9d;
+  color:#fff;
+  font-weight:800;
+  font-size:18px;
+  opacity:0;
+  animation:pop 0.8s forwards;
+  cursor:pointer;
+}
+
+.burst{
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  padding:5px 8px;
+  border-radius:999px;
+  color:#fff;
+  font-size:12px;
+  animation:explode 2.8s forwards;
+}
+
+@keyframes explode{
+  to{
+    transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by)));
+    opacity:0.9;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">给朱同学的一点鼓励 ❤️</div>
+
+<audio id="bgm" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+// ===== 心形用（少量）=====
+const heartMsgs = ["魔丸大人加油","不急不急！","慢慢来","灵珠在呢","你可以的","相信自己"];
+
+// ===== 爆炸用（丰富）=====
+const burstMsgs = [
+"加油加油","你很棒","别太累","记得吃饭","慢慢来",
+"会好的","你值得","别否定自己","都会过去的",
+"辛苦啦","给你好运","明天会更好","先深呼吸",
+''每天都很棒","不急就是稳","可以休息一下","一切都在变好",
+"我相信你","继续向前","今天也很好","稳住稳住","数学英语专业课都牛！","记得tan导数","阅读不许阴了","茆书没问题！"
+];
+
+const colors=["#ff6b9d","#7b61ff","#4cc9f0","#52b788","#ffd166"];
+
+function heart(t,s){
+  return {
+    x:16*Math.pow(Math.sin(t),3)*s,
+    y:-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*s
+  }
+}
+
+function createBubble(text,x,y,i,delay){
+  const d=document.createElement('div');
+  d.className='bubble';
+  d.innerText=text;
+  d.style.background=colors[i%colors.length];
+  d.style.setProperty('--x',x+'px');
+  d.style.setProperty('--y',y+'px');
+  d.style.animationDelay=delay+'s';
+  document.body.appendChild(d);
+}
+
+function generateHeart(){
+  const scale=Math.min(window.innerWidth,window.innerHeight)/40;
+
+  // 第一层
+  for(let i=0;i<40;i++){
+    const t=i/40*Math.PI*2;
+    const p=heart(t,scale);
+    createBubble(heartMsgs[i%heartMsgs.length],p.x,p.y,i,i*0.05);
+  }
+
+  // 第二层
+  for(let i=0;i<30;i++){
+    const t=i/30*Math.PI*2;
+    const p=heart(t,scale*0.75);
+    createBubble(heartMsgs[i%heartMsgs.length],p.x,p.y,i,2+i*0.05);
+  }
+
+  // 延迟出现按钮
+  setTimeout(showHighFive,5000);
+}
+
+function showHighFive(){
+  const d=document.createElement('div');
+  d.className='highfive';
+  d.innerText='击掌一下 ✋';
+  document.body.appendChild(d);
+
+  d.onclick=()=>{
+    startMusic();
+    explode();
+  }
+}
+
+function explode(){
+  const cols=10;
+  const rows=14;
+
+  for(let i=0;i<cols;i++){
+    for(let j=0;j<rows;j++){
+
+      const d=document.createElement('div');
+      d.className='burst';
+      d.innerText=burstMsgs[(i*rows+j)%burstMsgs.length];
+      d.style.background=colors[(i+j)%colors.length];
+
+      // 网格 + 随机扰动（关键）
+      let x=(i/(cols-1)-0.5)*window.innerWidth;
+      let y=(j/(rows-1)-0.5)*window.innerHeight;
+
+      x += (Math.random()-0.5)*40;
+      y += (Math.random()-0.5)*40;
+
+      d.style.setProperty('--bx',x+'px');
+      d.style.setProperty('--by',y+'px');
+
+      document.body.appendChild(d);
+    }
+  }
+}
+
+let started=false;
+function startMusic(){
+  if(started) return;
+  started=true;
+  document.getElementById('bgm').play().catch(()=>{});
+}
+
+window.onload=generateHeart;
+
+</script>
+
+</body>
+</html>
