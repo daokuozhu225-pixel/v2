@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>给你的一点鼓励 ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  background:radial-gradient(circle at top,#fff0f6,#ffd6e8);
+  overflow:hidden;
+}
+
+.title{
+  position:fixed;
+  top:20px;
+  width:100%;
+  text-align:center;
+  font-size:clamp(20px,5vw,36px);
+  color:#ff4d8d;
+  z-index:10;
+}
+
+.subtitle{
+  position:fixed;
+  top:70px;
+  width:100%;
+  text-align:center;
+  font-size:14px;
+  color:#ff7aa8;
+  z-index:10;
+}
+
+.bubble{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(0.3);
+  padding:8px 12px;
+  border-radius:999px;
+  color:#fff;
+  font-weight:600;
+  font-size:clamp(12px,3vw,16px);
+  opacity:0;
+  animation:pop 0.6s forwards;
+}
+
+@keyframes pop{
+  to{
+    opacity:1;
+    transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1);
+  }
+}
+
+.final{
+  cursor:pointer;
+  font-size:18px;
+  padding:12px 18px;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1)}
+  50%{transform:translate(-50%,-50%) scale(1.1)}
+}
+
+.burst{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  padding:6px 10px;
+  border-radius:999px;
+  color:#fff;
+  font-size:clamp(12px,3vw,16px);
+  animation:explode 1.2s forwards;
+}
+
+@keyframes explode{
+  to{
+    transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by)));
+    opacity:0.9;
+  }
+}
+
+.fade-message{
+  position:fixed;
+  bottom:60px;
+  width:100%;
+  text-align:center;
+  font-size:16px;
+  color:#ff5f9e;
+  opacity:0;
+  animation:fadeIn 2s forwards;
+  animation-delay:2s;
+}
+
+@keyframes fadeIn{
+  to{opacity:1}
+}
+
+.music-btn{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#ff5f9e;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  cursor:pointer;
+  z-index:20;
+}
+
+</style>
+</head>
+<body>
+
+<div class="title" id="title"></div>
+<div class="subtitle">希望你此刻被快乐包围</div>
+<div class="fade-message">慢一点也没关系，一切都会慢慢好起来的</div>
+<div class="music-btn" onclick="toggleMusic()">♪</div>
+
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9b2f9f.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const defaultMsgs=[
+"加油大人","你很棒","别太累","我在呢","慢慢来","会好的","魔丸有无穷潜力","你值得",
+"别怕","今天也很好","你已经很努力了","灵珠一直在"
+];
+
+const colors=["#ff6b9d","#ff8fab","#f72585","#b5179e","#7209b7","#4361ee","#4cc9f0"];
+
+function getParams(){
+  const p=new URLSearchParams(location.search);
+  return {
+    name:p.get("name")||"你",
+    msgs:p.get("msg")?decodeURIComponent(p.get("msg")).split(/[,，]/):defaultMsgs
+  };
+}
+
+function heart(t,s){
+  return {
+    x:16*Math.pow(Math.sin(t),3)*s,
+    y:-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*s
+  }
+}
+
+function createBubble(text,x,y,i,final=false){
+  const d=document.createElement('div');
+  d.className='bubble'+(final?' final':'');
+  d.innerText=text;
+  d.style.background=colors[i%colors.length];
+  d.style.setProperty('--x',x+'px');
+  d.style.setProperty('--y',y+'px');
+  d.style.animationDelay=i*0.08+'s';
+  document.body.appendChild(d);
+  return d;
+}
+
+function generate(msgs){
+  const scale=Math.min(window.innerWidth,window.innerHeight)/42;
+  for(let i=0;i<40;i++){
+    const t=i/40*Math.PI*2;
+    const p=heart(t,scale);
+    createBubble(msgs[i%msgs.length],p.x,p.y,i);
+  }
+  const f=createBubble("击掌 ❤️",0,0,99,true);
+  f.onclick=()=>explode(msgs);
+}
+
+function explode(msgs){
+  for(let i=0;i<80;i++){
+    const d=document.createElement('div');
+    d.className='burst';
+    d.innerText=msgs[i%msgs.length];
+    d.style.background=colors[i%colors.length];
+    d.style.setProperty('--bx',(Math.random()-0.5)*window.innerWidth*1.8+'px');
+    d.style.setProperty('--by',(Math.random()-0.5)*window.innerHeight*1.8+'px');
+    document.body.appendChild(d);
+  }
+}
+
+function toggleMusic(){
+  const a=document.getElementById('bgm');
+  if(a.paused){a.play();}else{a.pause();}
+}
+
+window.onload=()=>{
+  const {name,msgs}=getParams();
+  document.getElementById('title').innerText=`给 ${name} 的一点鼓励 ❤️`;
+  generate(msgs);
+
+  // 自动播放（需要用户点击后才能播放音乐，这是浏览器限制）
+  setTimeout(()=>explode(msgs),3500);
+};
+</script>
+
+</body>
+</html>
