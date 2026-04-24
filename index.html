@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>给朱同学的一点鼓励 ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:"PingFang SC","Microsoft YaHei";
+  overflow:hidden;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.8), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(180,210,255,0.4), transparent 40%),
+    linear-gradient(180deg,#fff8fb,#ffeef5,#f5f8ff);
+}
+
+/* 标题居中 + 气泡效果 */
+.title{
+  position:fixed;
+  left:50%;
+  top:24px;
+  transform:translateX(-50%);
+  z-index:30;
+
+  padding:12px 24px;
+  border-radius:999px;
+
+  text-align:center;
+  font-size:clamp(20px,5vw,34px);
+  font-weight:900;
+  color:#fff;
+
+  background:linear-gradient(135deg,#ff6b9d,#7b61ff,#4cc9f0);
+  box-shadow:
+    0 12px 30px rgba(255,100,150,0.28),
+    inset 0 2px 8px rgba(255,255,255,0.35);
+
+  animation:titleFloat 2.8s ease-in-out infinite;
+}
+
+.title::after{
+  content:"";
+  position:absolute;
+  top:4px;
+  left:18px;
+  right:18px;
+  height:36%;
+  border-radius:999px;
+  background:rgba(255,255,255,0.28);
+  pointer-events:none;
+}
+
+@keyframes titleFloat{
+  0%,100%{
+    transform:translateX(-50%) translateY(0) scale(1);
+  }
+  50%{
+    transform:translateX(-50%) translateY(-6px) scale(1.03);
+  }
+}
+
+.subtitle{
+  position:fixed;
+  left:50%;
+  top:92px;
+  transform:translateX(-50%);
+  z-index:20;
+  color:#ff5c93;
+  font-weight:700;
+  font-size:clamp(14px,3.6vw,20px);
+  text-align:center;
+}
+
+.fade-message{
+  position:fixed;
+  left:50%;
+  bottom:36px;
+  transform:translateX(-50%);
+  z-index:20;
+  color:#8a5a73;
+  font-size:clamp(13px,3.5vw,18px);
+  opacity:0.85;
+  text-align:center;
+}
+
+.overlay-flash{
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,0.45);
+  opacity:0;
+  pointer-events:none;
+  z-index:50;
+}
+
+.overlay-flash.active{
+  animation:flash 0.6s ease-out;
+}
+
+@keyframes flash{
+  0%{opacity:0}
+  30%{opacity:1}
+  100%{opacity:0}
+}
+
+/* 心形气泡 */
+.bubble{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(0.2);
+  padding:8px 14px;
+  border-radius:999px;
+  color:#fff;
+  font-weight:700;
+  font-size:13px;
+  white-space:nowrap;
+
+  background:linear-gradient(135deg,#ff6b9d,#7b61ff);
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+
+  opacity:0;
+  animation:pop 1s forwards;
+}
+
+.bubble::after{
+  content:"";
+  position:absolute;
+  top:3px;
+  left:10px;
+  right:10px;
+  height:35%;
+  border-radius:999px;
+  background:rgba(255,255,255,0.25);
+}
+
+@keyframes pop{
+  to{
+    opacity:1;
+    transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1);
+  }
+}
+
+/* 击掌按钮：页面正中间 */
+.highfive{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(0.2);
+
+  padding:18px 30px;
+  border-radius:999px;
+
+  background:linear-gradient(135deg,#ff6b9d,#7b61ff,#4cc9f0);
+  color:#fff;
+  font-weight:900;
+  font-size:22px;
+  white-space:nowrap;
+
+  box-shadow:
+    0 16px 38px rgba(255,100,150,0.35),
+    inset 0 2px 8px rgba(255,255,255,0.35);
+
+  opacity:0;
+  animation:highfivePop 0.8s forwards, highfiveFloat 2s ease-in-out infinite 0.8s;
+  cursor:pointer;
+  z-index:40;
+}
+
+.highfive::after{
+  content:"";
+  position:absolute;
+  top:5px;
+  left:18px;
+  right:18px;
+  height:35%;
+  border-radius:999px;
+  background:rgba(255,255,255,0.25);
+}
+
+@keyframes highfivePop{
+  to{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+  }
+}
+
+@keyframes highfiveFloat{
+  0%,100%{
+    transform:translate(-50%,-50%) scale(1);
+  }
+  50%{
+    transform:translate(-50%,-56%) scale(1.05);
+  }
+}
+
+/* 爆炸聊天框 */
+.burst{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  padding:7px 12px;
+  border-radius:999px;
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap;
+
+  box-shadow:0 10px 24px rgba(0,0,0,0.16);
+  animation:explode 3s forwards;
+  z-index:35;
+}
+
+.burst::after{
+  content:"";
+  position:absolute;
+  top:3px;
+  left:9px;
+  right:9px;
+  height:35%;
+  border-radius:999px;
+  background:rgba(255,255,255,0.24);
+}
+
+@keyframes explode{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(0.3);
+  }
+  18%{
+    opacity:1;
+  }
+  100%{
+    transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by))) scale(1);
+    opacity:0.92;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="title" id="title">朱同学加油！</div>
+<div class="subtitle">给朱同学一点鼓励！！</div>
+<div class="fade-message">慢一点也没关系，一切都会慢慢好起来的。</div>
+<div class="overlay-flash" id="flash"></div>
+
+<audio id="bgm" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const heartMsgs = [
+  "魔丸大人加油",
+  "不急不急！",
+  "慢慢来",
+  "灵珠在呢",
+  "你可以的",
+  "相信自己"
+];
+
+const burstMsgs = [
+  "加油加油",
+  "你很棒",
+  "别太累",
+  "记得吃饭",
+  "慢慢来",
+  "会好的",
+  "你值得",
+  "别否定自己",
+  "都会过去的",
+  "辛苦啦",
+  "给你好运",
+  "明天会更好",
+  "先深呼吸",
+  "每天都很棒",
+  "不急就是稳",
+  "可以休息一下",
+  "一切都在变好",
+  "我相信你",
+  "继续向前",
+  "今天也很好",
+  "稳住稳住",
+  "数学英语专业课都牛！",
+  "记得tan导数",
+  "阅读不许阴了",
+  "茆书没问题！"
+];
+
+const colors = [
+  "#ff6b9d",
+  "#7b61ff",
+  "#4cc9f0",
+  "#52b788",
+  "#ffd166",
+  "#f77f00",
+  "#06d6a0",
+  "#118ab2",
+  "#ef476f",
+  "#9b5de5",
+  "#00bbf9",
+  "#f15bb5"
+];
+
+function randomColor(){
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function randomGradient(){
+  let c1 = randomColor();
+  let c2 = randomColor();
+  while(c2 === c1){
+    c2 = randomColor();
+  }
+  return `linear-gradient(135deg, ${c1}, ${c2})`;
+}
+
+function heart(t,s){
+  return {
+    x:16*Math.pow(Math.sin(t),3)*s,
+    y:-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*s
+  };
+}
+
+function createBubble(text,x,y,i,delay){
+  const d=document.createElement("div");
+  d.className="bubble";
+  d.innerText=text;
+
+  d.style.background=`linear-gradient(135deg,
+    ${colors[i % colors.length]},
+    ${colors[(i + 2) % colors.length]})`;
+
+  d.style.setProperty("--x",x+"px");
+  d.style.setProperty("--y",y+"px");
+  d.style.animationDelay=delay+"s";
+
+  document.body.appendChild(d);
+}
+
+function generateHeart(){
+  const baseScale = Math.min(window.innerWidth,window.innerHeight)/40;
+
+  // ===== 主描边（超高密度）=====
+  for(let i=0;i<260;i++){
+    const t=i/260*Math.PI*2;
+    const p=heart(t,baseScale);
+
+    const jitterX = (Math.random()-0.5)*3;
+    const jitterY = (Math.random()-0.5)*3;
+
+    createBubble(
+      heartMsgs[i%heartMsgs.length],
+      p.x + jitterX,
+      p.y + jitterY,
+      i,
+      i*0.015
+    );
+  }
+
+  // ===== 内侧描边（形成“线宽”）=====
+  for(let i=0;i<220;i++){
+    const t=i/220*Math.PI*2;
+    const p=heart(t,baseScale*0.94);
+
+    const jitterX = (Math.random()-0.5)*2;
+    const jitterY = (Math.random()-0.5)*2;
+
+    createBubble(
+      heartMsgs[i%heartMsgs.length],
+      p.x + jitterX,
+      p.y + jitterY,
+      i,
+      1.2 + i*0.015
+    );
+  }
+
+  // ===== 外侧描边（再加一层厚度）=====
+  for(let i=0;i<200;i++){
+    const t=i/200*Math.PI*2;
+    const p=heart(t,baseScale*1.06);
+
+    const jitterX = (Math.random()-0.5)*2;
+    const jitterY = (Math.random()-0.5)*2;
+
+    createBubble(
+      heartMsgs[i%heartMsgs.length],
+      p.x + jitterX,
+      p.y + jitterY,
+      i,
+      2.2 + i*0.015
+    );
+  }
+
+  // ===== 边缘细节补点（关键，让轮廓更“顺滑”）=====
+  for(let i=0;i<120;i++){
+    const t=i/120*Math.PI*2;
+    const p=heart(t,baseScale*(0.9 + Math.random()*0.2));
+
+    createBubble(
+      heartMsgs[i%heartMsgs.length],
+      p.x,
+      p.y,
+      i,
+      3.2 + i*0.01
+    );
+  }
+
+  setTimeout(showHighFive,5500);
+}function showHighFive(){
+  const d=document.createElement("div");
+  d.className="highfive";
+  d.innerText="击掌一下 ✋";
+  document.body.appendChild(d);
+
+  d.onclick=()=>{
+    startMusic();
+    flashScreen();
+    explode();
+  };
+}
+
+function flashScreen(){
+  const flash=document.getElementById("flash");
+  flash.classList.remove("active");
+  void flash.offsetWidth;
+  flash.classList.add("active");
+}
+
+function explode(){
+  const cols=10;
+  const rows=14;
+
+  for(let i=0;i<cols;i++){
+    for(let j=0;j<rows;j++){
+      const d=document.createElement("div");
+      d.className="burst";
+      d.innerText=burstMsgs[(i*rows+j)%burstMsgs.length];
+
+      let x=(i/(cols-1)-0.5)*window.innerWidth;
+      let y=(j/(rows-1)-0.5)*window.innerHeight;
+
+      x += (Math.random()-0.5)*60;
+      y += (Math.random()-0.5)*60;
+
+      d.style.background=randomGradient();
+      d.style.setProperty("--bx",x+"px");
+      d.style.setProperty("--by",y+"px");
+
+      document.body.appendChild(d);
+    }
+  }
+}
+
+let started=false;
+function startMusic(){
+  if(started) return;
+  started=true;
+  document.getElementById("bgm").play().catch(()=>{});
+}
+
+window.onload=generateHeart;
+</script>
+
+</body>
+</html>
